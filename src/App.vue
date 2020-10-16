@@ -1,20 +1,25 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="flex lg:items-center h-screen lg:w-3/4 mx-auto">
+      <router-view></router-view>
     </div>
-    <router-view/>
   </div>
 </template>
 
+<script>
+
+export default {
+  components: {},
+  data: () => ({
+
+  }),
+}
+</script>
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body{
+  @apply bg-gradient-to-r from-indigo-700 to-teal-400;
+  font-family: 'Roboto', sans-serif;
 }
 </style>

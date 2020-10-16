@@ -10,5 +10,5 @@ module.exports = {
     extend: {}
   },
   variants: {},
-  plugins: []
+  plugins: ['tailwind-percentage-heights-plugin']
 }
