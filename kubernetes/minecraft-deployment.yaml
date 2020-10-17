@@ -17,10 +17,7 @@ spec:
                 - image: itzg/minecraft-server
                   name: minecraft-vanilla
                   env:
-                      -   name: EULA
-                          value: TRUE
+                      -   name: "EULA"
+                          value: "TRUE"
                   ports:
                       -   containerPort: 25565
-            restartPolicy: Always
-
-
