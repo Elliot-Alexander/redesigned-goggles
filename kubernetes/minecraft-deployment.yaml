@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: minecraft-deployment
+    labels:
+        app: minecraft
+spec:
+    selector:
+        matchLabels:
+            app: minecraft
+    template:
+        metadata:
+            labels:
+                app: minecraft
+        spec:
+            containers:
+                - image: itzg/minecraft-server
+                  name: minecraft-vanilla
+                  ports:
+                      -   containerPort: 25565
+            restartPolicy: Always
+
+
