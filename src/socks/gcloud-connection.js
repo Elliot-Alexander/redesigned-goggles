@@ -32,3 +32,4 @@ getServices.on('exit', (code) => {
 })
 
 const  getPods = spawn("kubectl", ["get", "pods","-o", "json"])
+const  exposePod = spawn("kubectl", ["expose", "pod","{{Pod Name}}", "type=LoadBalancer]")
