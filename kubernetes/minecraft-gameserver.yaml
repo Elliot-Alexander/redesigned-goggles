@@ -1,7 +1,7 @@
 apiVersion: "agones.dev/v1"
 kind: GameServer
 metadata:
-    generateName: "minecraft-simple-" # generate a unique name, with the given prefix
+    name: "minecraft-simple"
 spec:
     # if there is more than one container, specify which one is the game server
     # Array of ports that can be exposed as direct connections to the game server container
