@@ -15,25 +15,53 @@ processes = [];
 users = [];
 
 io.on("connection", (socket) => {
-  socket.on("create_room", (room_id) => {
-    processes.push(room_id);
-    const room = socket.of(room_id);
-    room.on("connection", socket => {
-        console.log("connected to room")
-    })
-    socket.join(room_id);
-  });
   socket.on("lfg", () => {
-
+    socket.emit("lfg", processes);
+    console.log("joined lfg");
   });
-  socket.on("register_user", (username) => {
-    socket.emit("verify", !users.includes(username))
-  })
+  socket.on("register_user", (username, room_id) => {
+    socket.emit(
+      "roomCheck",
+      !(users.includes(username) || processes.includes(room_id)) &&
+        !(
+          username === undefined ||
+          username === "" ||
+          room_id === undefined || room_id === ""
+        )
+    );
+    console.log(processes);
+    console.log(users);
+    if (
+      !(
+        username === undefined ||
+        username === "" ||
+        room_id === undefined || room_id === ""
+      )
+    ) {
+      users.push(username);
+      processes.push(room_id);
+    }
+    console.log("check");
+    socket.on("command"+room_id, (command) => {
+      "kubectl exec -i POD_NAME COMMAND"
+    })
+    socket.join("command"+room_id);
+    socket.leave("lfg");
+    socket.to("lfg").broadcast.emit("new_room", room_id)
+  });
+  socket.on("generate_id", () => {
+    let code = Math.random()
+      .toString(36)
+      .substring(7);
+    while (processes.includes(code)) {
+      code = Math.random()
+        .toString(36)
+        .substring(7);
+    }
+    socket.emit("generate_id", code);
+  });
+
   socket.join("lfg");
-  console.log("Here");
-  
-
-
 });
 
 server.listen(3000);

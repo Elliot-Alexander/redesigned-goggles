@@ -14,12 +14,12 @@
           <input v-model="room" class="shadow-md appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" id="room" type="text" placeholder="Room ID">
         </div>
         <div class="flex mb-4 justify-center mb-4">
-          <button v-on:click="" class="text-white font-bold py-3 rounded w-1/2 bg-gradient-to-r from-teal-400 to-indigo-700">
+          <button v-on:click="register" class="text-white font-bold py-3 rounded w-1/2 bg-gradient-to-r from-teal-400 to-indigo-700">
             <span>Join</span>
           </button>
       </div>
         <div class="flex mb-4 justify-center mb-4">
-          <button v-on:click="" class="text-white font-bold py-3 rounded w-1/2 bg-gradient-to-r from-teal-400 to-indigo-700">
+          <button v-on:click="generate_id" class="text-white font-bold py-3 rounded w-1/2 bg-gradient-to-r from-teal-400 to-indigo-700">
             <span>Generate Room ID</span>
           </button>
       </div>
@@ -36,7 +36,7 @@ export default {
   data: () => ({
     name: '',
     room: '',
-    error: false
+    error: false,
   }),
   sockets: {
     roomCheck: function(val) {
@@ -46,17 +46,24 @@ export default {
       } else {
         this.error = true
       }
+    },
+    generate_id: function(val) {
+        this.room = val;
     }
   },
   methods: {
     register: function () {
-      if (this.name !== undefined || this.name !== '' &&
-          this.room !== undefined || this.room !== '') {
-        this.$socket.client.emit('register_user', {
-          name: this.name,
-          room: this.room
-        })
+      if (!((this.name === undefined || this.name === '') ||
+          (this.room === undefined || this.room === ''))) {
+        this.$socket.client.emit('register_user', this.name,
+this.room)
       }
+      else {
+        this.error = true;
+      }
+    },
+    generate_id: function() {
+      this.$socket.client.emit('generate_id');
     },
 
   }
