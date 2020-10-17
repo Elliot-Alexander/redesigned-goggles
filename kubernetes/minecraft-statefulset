@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    name: minecraft-server-set
+spec:
+    selector:
+        matchLabels:
+            app: minecraft-server
+    serviceName: "minecraft-server-service"
+    replicas: 3
+    template:
+        metadata:
+            labels:
+                app: minecraft-server
+        spec:
+            containers:
+                -   name: minecraft-server
+                    image: itzg/minecraft-server
+                    ports:
+                        -   containerPort: 25565
+                            name: default
+                    env:
+                        -   name: "EULA"
+                            value: "TRUE"
