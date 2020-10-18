@@ -95,7 +95,7 @@ io.on("connection", (socket) => {
             exposePod.stdout.on("data", (data) => {
               console.log("expose")
               const  getServices = spawn("kubectl", ["get", "svc","-o", "json"])
-
+              setTimeout(8000)
               getServices.stdout.on("data", (data) => {
                 // console.log(data.toString());
                 console.log("getting services")
