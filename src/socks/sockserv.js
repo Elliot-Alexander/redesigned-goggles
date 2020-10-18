@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
   socket.on("register_user", (username, room_id) => {
     socket.emit(
       "roomCheck",
-      !(users[room_id] === undefined) && !users[room_id].includes(username) &&
+      (users[room_id] === undefined) || !users[room_id].includes(username) &&
         !(
           username === undefined ||
           username === "" ||
@@ -82,7 +82,7 @@ io.on("connection", (socket) => {
         let pod_name = ''
         getPods.stdout.on("data", (data) => {
           console.log(data.toString());
-          pod_name = JSON.parse(getPods).items[-1].metadata.name;
+          pod_name = JSON.parse(data.toString()).items[JSON.parse(data.toString()).items.length - 1].metadata.name;
         });
 
         getPods.stderr.on("data", (data) => {
@@ -93,12 +93,12 @@ io.on("connection", (socket) => {
           console.log(`Child exited with code ${code}`);
         });
 
-        const  exposePod = spawn("kubectl", ["expose", "pod",pod_name, "type=LoadBalancer"])
+        const  exposePod = spawn("kubectl", ["expose", "pod",pod_name, "--type=LoadBalancer"])
         const  getServices = spawn("kubectl", ["get", "svc","-o", "json"])
         let ip = ''
         getServices.stdout.on("data", (data) => {
           console.log(data.toString());
-          ip = JSON.parse(getServices).items[-1].status.loadBalancer.ingress[0].ip
+          ip = JSON.parse(data.toString()).items[JSON.parse(data.toString()).items.length - 1].status.loadBalancer.ingress[0].ip
         });
 
         getServices.stderr.on("data", (data) => {

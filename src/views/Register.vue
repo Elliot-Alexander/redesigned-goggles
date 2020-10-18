@@ -41,7 +41,7 @@ export default {
   sockets: {
     roomCheck: function(val) {
       if (val) {
-        this.$router.push('/chat')
+        this.$router.push('/game')
         this.$router.go(1)
       } else {
         this.error = true
