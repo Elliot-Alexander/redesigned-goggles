@@ -109,6 +109,7 @@ io.on("connection", (socket) => {
                   console.log(list[i].metadata.name === pod_name)
                   console.log(pod_name)
                   if (list[i].metadata.name === pod_name) {
+                    setTimeout(5000)
                     ip = list[i].status.loadBalancer.ingress[0].ip;
                   }
                 }
