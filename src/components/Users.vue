@@ -15,8 +15,13 @@ name: "Users",
 }),
 sockets: {
     users: function(val) {
+      console.log("get users")
+      console.log(val);
       this.users = val;
     },
+  new_user: function (val) {
+      this.users.push(val)
+  }
   },
 }
 </script>

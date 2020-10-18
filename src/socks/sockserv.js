@@ -74,7 +74,7 @@ io.on("connection", (socket) => {
             console.log("Socket closed!");
             process.exit();
         });
-          "kubectl exec -i POD_NAME COMMAND";
+          conn.connect();
         });
         socket.to("lfg").broadcast.emit("new_room", room_id);
         const scaleUpSet = spawn("kubectl", ["scale", "sts", "minecraft-server-set", "--replicas=" + rooms.length])
@@ -98,10 +98,19 @@ io.on("connection", (socket) => {
         let ip = ''
         getServices.stdout.on("data", (data) => {
           // console.log(data.toString());
-          ip = JSON.parse(data.toString()).items[JSON.parse(data.toString()).items.length - 1].status.loadBalancer.ingress[0].ip
+          let list =  JSON.parse(data.toString()).items
+          for (let i=0; i< list.length ; i++) {
+            console.log(list[i].metadata.name === pod_name)
+            console.log(pod_name)
+            if (list[i].metadata.name === pod_name) {
+              console.log(list[i].status.loadBalancer.ingress[0].ip)
+              ip = list[i].status.loadBalancer.ingress[0].ip;
+            }
+          }
           active[room_id] = [ip, pod_name]
           socket.emit("ip", active[room_id][0])
           console.log("dumb" + ip)
+
         });
 
         getServices.stderr.on("data", (data) => {
@@ -116,13 +125,21 @@ io.on("connection", (socket) => {
         socket.to(room_id).emit("ip", ip)
         users[room_id] = [];
       }
+      console.log(users)
       users[room_id].push(username);
       socket.emit("users", users[room_id]);
+      socket.join(room_id)
+      console.log("Join " + room_id)
+      socket.to(room_id).emit("new_user", username)
+      console.log(active)
+      if ( active[room_id] !== undefined && active[room_id][0] !== undefined) {
+        console.log("This should work")
+        socket.emit("ip", active[room_id][0])
+      }
+      socket.emit("userInfo", room_id)
+      socket.leave("lfg");
     }    
-    socket.join(room_id)
-    console.log("Join " + room_id)
-    socket.to(room_id).broadcast.emit("new_user", username)
-    socket.leave("lfg");
+
   });
 
   socket.on("generate_id", () => {

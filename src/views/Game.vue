@@ -3,10 +3,9 @@
     <div class="">
       <game-connection></game-connection>
     </div>
-    <button v-on:click="startServer" class="text-white font-bold py-3 rounded w-1/3 bg-gradient-to-r from-teal-400 to-indigo-700 self-center mb-4">
-      <span v-if="!started">Start</span>
-      <span v-if="started">Stop</span>
-    </button>
+    <div class="self-center">
+      <input readonly v-model="gamecode" @focus="$event.target.select()" class="lg:text-6xl text-xl text-center shadow-md appearance-none border rounded w-full py-2 px-3 my-4 text-gray-700 leading-tight focus:outline-none" id="gamecode" type="text" placeholder="Gamecode">
+    </div>
     <div class="flex flex-row w-full h-full mr-2">
       <div v-if="host" class="w-full h-full">
         <console></console>
@@ -27,8 +26,14 @@ export default {
   components: {GameConnection, Users, Console},
   data: () => ({
     host: true,
+    gamecode: '',
     started: false
   }),
+  sockets: {
+    userInfo: function (val) {
+      this.gamecode = val
+    }
+  },
   methods: {
     startServer: function () {
       if (!this.started) {
