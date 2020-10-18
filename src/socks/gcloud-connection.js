@@ -35,4 +35,5 @@ const login = spawn("gcloud.cmd", ["container", "clusters", "get-credentials", "
 const  getServices = spawn("kubectl", ["get", "svc","-o", "json"])
 const  getPods = spawn("kubectl", ["get", "pods","-o", "json"])
 const  exposePod = spawn("kubectl", ["expose", "pod","{{Pod Name}}", "type=LoadBalancer"])
-const scaleSet = spawn("kubectl", ["scale", "sts", "minecraft-statefulset", "--replicas={replica_number}"])
+const scaleUpSet = spawn("kubectl", ["scale", "sts", "minecraft-server-set", "--replicas={replica_number}"])
+const scaleDownSet = spawn("kubectl", ["patch", "sts", "minecraft-server-set", "-p", "\'{\"spec\":{\"replicas\":3}}\'"])
