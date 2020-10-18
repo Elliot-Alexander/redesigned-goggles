@@ -17,7 +17,7 @@ export default {
   components: {ConsoleLine},
   data: () => ({
     command: '',
-    commandOutputs: [{ message: 'testLine' }]
+    commandOutputs: []
   }),
   methods:  {
     sendCommand: function () {

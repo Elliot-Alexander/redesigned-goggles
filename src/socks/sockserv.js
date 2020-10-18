@@ -102,14 +102,13 @@ io.on("connection", (socket) => {
                 let list =  JSON.parse(data.toString()).items
                 console.log(list)
                 for (let i=0; i< list.length ; i++) {
-                  if (i > rooms.length-1) {
+                  if (i > rooms.length) {
                     console.log(i)
                     const  delService = spawn("kubectl", ["delete", "svc","minecraft-server-set-"+i])
                   }
                   console.log(list[i].metadata.name === pod_name)
                   console.log(pod_name)
                   if (list[i].metadata.name === pod_name) {
-                    console.log(list[i].status.loadBalancer.ingress[0].ip)
                     ip = list[i].status.loadBalancer.ingress[0].ip;
                   }
                 }
