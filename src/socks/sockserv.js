@@ -79,11 +79,35 @@ io.on("connection", (socket) => {
         socket.to("lfg").broadcast.emit("new_room", room_id);
         const scaleUpSet = spawn("kubectl", ["scale", "sts", "minecraft-server-set", "--replicas=" + rooms.length])
         const  getPods = spawn("kubectl", ["get", "pods","-o", "json"])
+        let pod_name = ''
+        getPods.stdout.on("data", (data) => {
+          console.log(data.toString());
+          pod_name = JSON.parse(getPods).items[-1].metadata.name;
+        });
 
-        let pod_name = JSON.parse(getPods).items[-1].metadata.name;
+        getPods.stderr.on("data", (data) => {
+          console.error(data.toString());
+        });
+
+        getPods.on("exit", (code) => {
+          console.log(`Child exited with code ${code}`);
+        });
+
         const  exposePod = spawn("kubectl", ["expose", "pod",pod_name, "type=LoadBalancer"])
         const  getServices = spawn("kubectl", ["get", "svc","-o", "json"])
-        let ip = JSON.parse(getServices).items[-1].status.loadBalancer.ingress[0].ip
+        let ip = ''
+        getServices.stdout.on("data", (data) => {
+          console.log(data.toString());
+          ip = JSON.parse(getServices).items[-1].status.loadBalancer.ingress[0].ip
+        });
+
+        getServices.stderr.on("data", (data) => {
+          console.error(data.toString());
+        });
+
+        getServices.on("exit", (code) => {
+          console.log(`Child exited with code ${code}`);
+        });
         active[room_id] = [ip, pod_name]
         socket.to(room_id).emit("ip", ip)
         users[room_id] = [];

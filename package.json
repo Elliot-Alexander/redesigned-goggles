@@ -10,9 +10,10 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^2.6.5",
+    "rcon": "^1.0.3",
+    "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.1",
     "tailwind-percentage-heights-plugin": "^0.1.4",
-    "socket.io": "^2.3.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vue-socket.io-extended": "^4.0.5"
