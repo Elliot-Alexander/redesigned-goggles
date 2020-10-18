@@ -30,11 +30,6 @@ login.on("exit", (code) => {
   console.log(`Child exited with code ${code}`);
 });
 
-app.get("/", (req, res) => {
-  res.send(
-    '<script src="/socket.io/socket.io.js"></script><script>var socket = io();</script>'
-  );
-});
 
 rooms = [];
 users = {};
@@ -49,7 +44,7 @@ io.on("connection", (socket) => {
   socket.on("register_user", (username, room_id) => {
     socket.emit(
       "roomCheck",
-      !users[room_id].includes(username) &&
+      !(users[room_id] === undefined) && !users[room_id].includes(username) &&
         !(
           username === undefined ||
           username === "" ||
