@@ -11,7 +11,12 @@ export default {
   data: () => ({
     server: '',
     status: 'Offline'
-})
+}),
+sockets: {
+    ip: function(val) {
+      server = val;
+    },
+  },
 }
 </script>
 

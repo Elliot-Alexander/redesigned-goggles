@@ -11,7 +11,12 @@
 import User from "@/components/User";
 export default {
 name: "Users",
-  components: {User}
+  components: {User},
+sockets: {
+    users: function(val) {
+      users = val;
+    },
+  },
 }
 </script>
 
