@@ -1,9 +1,7 @@
 <template>
   <div class="w-full border rounded h-full">
-      <user name="John Doe"></user>
-      <user name="John Doe"></user>
-      <user name="John Doe"></user>
-      <user name="John Doe"></user>
+      <user v-for="user in users"
+          :name="user"></user>
   </div>
 </template>
 
@@ -12,9 +10,12 @@ import User from "@/components/User";
 export default {
 name: "Users",
   components: {User},
+  data: () => ({
+  users: []
+}),
 sockets: {
     users: function(val) {
-      users = val;
+      this.users = val;
     },
   },
 }

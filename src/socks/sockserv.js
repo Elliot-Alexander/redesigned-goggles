@@ -81,7 +81,7 @@ io.on("connection", (socket) => {
         const  getPods = spawn("kubectl", ["get", "pods","-o", "json"])
         let pod_name = ''
         getPods.stdout.on("data", (data) => {
-          console.log(data.toString());
+          // console.log(data.toString());
           pod_name = JSON.parse(data.toString()).items[JSON.parse(data.toString()).items.length - 1].metadata.name;
         });
 
@@ -97,8 +97,11 @@ io.on("connection", (socket) => {
         const  getServices = spawn("kubectl", ["get", "svc","-o", "json"])
         let ip = ''
         getServices.stdout.on("data", (data) => {
-          console.log(data.toString());
+          // console.log(data.toString());
           ip = JSON.parse(data.toString()).items[JSON.parse(data.toString()).items.length - 1].status.loadBalancer.ingress[0].ip
+          active[room_id] = [ip, pod_name]
+          socket.emit("ip", active[room_id][0])
+          console.log("dumb" + ip)
         });
 
         getServices.stderr.on("data", (data) => {
@@ -108,7 +111,8 @@ io.on("connection", (socket) => {
         getServices.on("exit", (code) => {
           console.log(`Child exited with code ${code}`);
         });
-        active[room_id] = [ip, pod_name]
+
+        console.log(ip)
         socket.to(room_id).emit("ip", ip)
         users[room_id] = [];
       }
@@ -116,8 +120,8 @@ io.on("connection", (socket) => {
       socket.emit("users", users[room_id]);
     }    
     socket.join(room_id)
+    console.log("Join " + room_id)
     socket.to(room_id).broadcast.emit("new_user", username)
-    socket.emit("ip", active[room_id][0])
     socket.leave("lfg");
   });
 

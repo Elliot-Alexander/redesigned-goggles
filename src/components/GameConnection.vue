@@ -14,7 +14,10 @@ export default {
 }),
 sockets: {
     ip: function(val) {
-      server = val;
+      console.log("ip receiverd " + val);
+      console.log(val);
+      this.server = val;
+      this.status="Online"
     },
   },
 }
