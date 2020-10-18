@@ -2,9 +2,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
     name: minecraft-server-set
-    annotations:
-        service-per-pod-label: "statefulset.kubernetes.io/minecraft-server-set"
-        service-per-pod-ports: "25565:25565"
 spec:
     selector:
         matchLabels:
@@ -22,6 +19,8 @@ spec:
                     ports:
                         -   containerPort: 25565
                             name: default
+                        - containerPort: 25575
+                          name: rcon
                     env:
                         -   name: "EULA"
                             value: "TRUE"

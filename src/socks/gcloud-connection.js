@@ -31,5 +31,8 @@ getServices.on('exit', (code) => {
     console.log(`Child exited with code ${code}`);
 })
 
+const login = spawn("gcloud.cmd", ["container", "clusters", "get-credentials", "cluster-1", "--zone", "us-central1-c", "--project", "hackathon2020-292800"])
+const  getServices = spawn("kubectl", ["get", "svc","-o", "json"])
 const  getPods = spawn("kubectl", ["get", "pods","-o", "json"])
-const  exposePod = spawn("kubectl", ["expose", "pod","{{Pod Name}}", "type=LoadBalancer]")
+const  exposePod = spawn("kubectl", ["expose", "pod","{{Pod Name}}", "type=LoadBalancer"])
+const scaleSet = spawn("kubectl", ["scale", "sts", "minecraft-statefulset", "--replicas={replica_number}"])
