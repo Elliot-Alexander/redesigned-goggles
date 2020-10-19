@@ -15,4 +15,4 @@ Run:
 ```node src/socks/sockserv.js```
 
 
-Built by myself and [@SijingZ](https://github.com/SijingZ)
+Built by myself and [@fulminatingmoat](https://github.com/fulminatingmoat)
