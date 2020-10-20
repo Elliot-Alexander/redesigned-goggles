@@ -95,7 +95,6 @@ io.on("connection", (socket) => {
             exposePod.stdout.on("data", (data) => {
               console.log("expose")
               const  getServices = spawn("kubectl", ["get", "svc","-o", "json"])
-              setTimeout(8000)
               getServices.stdout.on("data", (data) => {
                 // console.log(data.toString());
                 console.log("getting services")
@@ -109,7 +108,12 @@ io.on("connection", (socket) => {
                   console.log(list[i].metadata.name === pod_name)
                   console.log(pod_name)
                   if (list[i].metadata.name === pod_name) {
-                    setTimeout(5000)
+                    while (list[i].status.loadBalancer.ingress === undefined) {
+                      const  getServicesTemp = spawn("kubectl", ["get", "svc","-o", "json"])
+                      setTimeout(getServicesTemp.stdout.on("data", (data) => {
+                        list = JSON.parse(data.toString()).items;
+                      }),3000)
+                    } 
                     ip = list[i].status.loadBalancer.ingress[0].ip;
                   }
                 }
